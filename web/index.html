@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!--
+  index.html
+  Author: Madhusudan Kharote
+  Purpose: Class homepage for the assignment. Presents a photo, a short
+  biography, and links to the student survey page and the custom error page.
+  Styled with Bootstrap 5 plus a custom layer using the official George Mason
+  University brand colors, Mason Green (#005239) and Mason Gold (#FFC733).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Madhusudan Kharote — Class Homepage</title>
+<meta name="description" content="Class homepage of Madhusudan Kharote, computer science graduate student at George Mason University.">
+
+<!-- CSS template: Bootstrap 5 (grid + base components), with a Mason brand layer below -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Mason brand tokens ---------- */
+  :root{
+    --mason-green:#005239;      /* Pantone 357C */
+    --mason-gold:#FFC733;       /* Pantone 123C */
+    --deep:#00291D;             /* darkened green for depth */
+    --paper:#F5F6F2;            /* page background */
+    --ink:#12211C;              /* body text */
+    --muted:#5C6F67;            /* secondary text */
+    --line:#D6DCD5;
+    --measure:64ch;
+  }
+
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Source Serif 4",Georgia,serif;
+    font-size:1.0625rem;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.display-face{
+    font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    font-weight:800;
+    letter-spacing:-.025em;
+    line-height:1.02;
+  }
+
+  a{color:var(--mason-green);text-decoration-thickness:1px;text-underline-offset:3px}
+  a:hover{color:#007954}
+  :focus-visible{outline:3px solid var(--mason-gold);outline-offset:3px;border-radius:2px}
+
+  .skip{position:absolute;left:-9999px;top:0;background:var(--mason-gold);color:var(--deep);padding:.6rem 1rem;z-index:99}
+  .skip:focus{left:.75rem;top:.75rem}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(158deg,var(--deep) 0%,var(--mason-green) 58%,#00402C 100%);
+    color:#EAF1EC;
+    padding:1.5rem 0 5rem;
+  }
+  .hero-traces{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;opacity:.22;
+  }
+  .hero .container{position:relative;z-index:1}
+
+  .mark{
+    display:inline-flex;align-items:baseline;gap:.55rem;
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+    color:#EAF1EC;text-decoration:none;font-size:1rem;letter-spacing:-.01em;
+  }
+  .mark span{
+    display:inline-grid;place-items:center;
+    width:34px;height:34px;border-radius:3px;
+    background:var(--mason-gold);color:var(--deep);
+    font-weight:800;font-size:.95rem;letter-spacing:0;
+  }
+  .topnav a{
+    color:#B9CFC4;text-decoration:none;font-family:"Bricolage Grotesque",sans-serif;
+    font-size:.95rem;margin-left:1.6rem;
+  }
+  .topnav a:hover{color:var(--mason-gold)}
+
+  .hero h1{
+    font-size:clamp(2.9rem,7.2vw,5.4rem);
+    color:#fff;
+    margin:.25rem 0 0;
+  }
+  .hero h1 em{font-style:normal;display:block;color:var(--mason-gold)}
+  .role{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+    color:var(--mason-gold);font-size:1.02rem;letter-spacing:.01em;margin-bottom:.4rem;
+  }
+  .hero p.lede{
+    max-width:52ch;color:#D3E2D8;font-size:1.12rem;margin-top:1.4rem;
+  }
+
+  /* portrait plate */
+  .portrait{position:relative;max-width:330px;margin-left:auto}
+  .portrait::after{
+    content:"";position:absolute;inset:14px -14px -14px 14px;
+    border:1.5px solid var(--mason-gold);border-radius:3px;z-index:0;
+  }
+  .portrait .frame{
+    position:relative;z-index:1;aspect-ratio:4/5;border-radius:3px;overflow:hidden;
+    background:var(--deep);display:grid;place-items:center;
+  }
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+  .portrait .initials{
+    position:absolute;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:4.5rem;color:rgba(255,199,51,.85);letter-spacing:-.04em;
+  }
+  .portrait figcaption{
+    margin-top:1.5rem;color:#A9C2B5;font-size:.9rem;max-width:330px;
+  }
+
+  /* ---------- Body sections ---------- */
+  .section{padding:4.5rem 0}
+  .section + .section{padding-top:0}
+  .section h2{
+    font-size:1.6rem;margin:0 0 1.5rem;
+    padding-bottom:.7rem;border-bottom:2px solid var(--mason-green);
+    display:inline-block;
+  }
+  .prose{max-width:var(--measure)}
+  .prose p + p{margin-top:1.05rem}
+
+  .facts{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+  .facts li{
+    display:flex;gap:1rem;justify-content:space-between;
+    padding:.75rem 0;border-bottom:1px solid var(--line);font-size:.98rem;
+  }
+  .facts dt,.facts .k{color:var(--muted);flex:0 0 auto}
+  .facts .v{text-align:right;font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+
+  .work{list-style:none;padding:0;margin:0}
+  .work li{padding:1.35rem 0;border-top:1px solid var(--line)}
+  .work li:last-child{border-bottom:1px solid var(--line)}
+  .work h3{font-size:1.12rem;margin:0 0 .3rem;font-weight:600;letter-spacing:-.01em}
+  .work p{margin:0;color:var(--muted);max-width:60ch}
+
+  .btn-mason{
+    --bs-btn-color:var(--deep);
+    background:var(--mason-gold);color:var(--deep);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+    border:none;border-radius:3px;padding:.7rem 1.4rem;
+  }
+  .btn-mason:hover{background:#FFD766;color:var(--deep)}
+
+  .survey-band{
+    display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;
+    background:#EDF3EE;border-left:4px solid var(--mason-gold);
+    padding:1.9rem 2rem;border-radius:3px;
+  }
+  .survey-band p{max-width:56ch;color:var(--muted)}
+  .survey-title{
+    font-size:1.4rem;margin:0 0 .5rem;border:none;padding:0;display:block;
+  }
+
+  .quote{
+    border-left:3px solid var(--mason-gold);
+    padding:.2rem 0 .2rem 1.25rem;color:var(--muted);max-width:52ch;
+  }
+
+  /* ---------- Footer ---------- */
+  .site-footer{
+    background:var(--mason-green);color:#CFE0D6;
+    padding:2.5rem 0;margin-top:4rem;
+    border-top:4px solid var(--mason-gold);
+    font-size:.92rem;
+  }
+  .site-footer a{color:var(--mason-gold);text-decoration:none}
+  .site-footer a:hover{text-decoration:underline}
+
+  @media (max-width:767.98px){
+    .portrait{margin:2.5rem auto 0}
+    .portrait figcaption{margin-inline:auto}
+    .hero{padding-bottom:3.5rem}
+    .facts .v{text-align:left}
+  }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero">
+  <!-- circuit-trace field: a nod to the electronics lab, kept faint -->
+  <svg class="hero-traces" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#FFC733" stroke-width="1.4">
+      <path d="M-20 90 H180 l40 40 H430 l60 -60 H760"/>
+      <path d="M-20 250 H120 l70 70 H520 l40 -40 H900 l50 50 H1220"/>
+      <path d="M1220 140 H980 l-50 -50 H700"/>
+      <path d="M-20 470 H260 l50 -50 H640 l60 60 H1220"/>
+      <path d="M330 620 V520 l60 -60 V300"/>
+      <path d="M840 620 V430 l-50 -50 V210"/>
+      <path d="M1090 620 V400 l-60 -60 V180"/>
+    </g>
+    <g fill="#FFC733">
+      <circle cx="430" cy="130" r="4.5"/><circle cx="900" cy="280" r="4.5"/>
+      <circle cx="700" cy="90" r="4.5"/><circle cx="640" cy="420" r="4.5"/>
+      <circle cx="390" cy="300" r="4.5"/><circle cx="790" cy="210" r="4.5"/>
+      <circle cx="1030" cy="180" r="4.5"/><circle cx="120" cy="250" r="4.5"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <nav class="d-flex justify-content-between align-items-center py-2 topnav">
+      <a class="mark" href="index.html"><span>MK</span> Madhusudan Kharote</a>
+      <div class="d-none d-sm-block">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="survey.html">Survey</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <div class="row align-items-center g-5 mt-2 mt-md-4">
+      <div class="col-lg-7">
+        <p class="role">Class homepage · CS 555 Web Development</p>
+        <h1>Madhusudan <em>Kharote</em></h1>
+        <p class="lede">
+          I'm a computer science graduate student at George Mason University, finishing in
+          December 2026. I came to software from electronics — firmware, sensors, and the
+          small stubborn bugs that only appear on real hardware — and I've spent the last
+          year moving that same habit of mind onto the web.
+        </p>
+        <a class="btn btn-mason mt-3" href="#about">Read more about me</a>
+      </div>
+
+      <div class="col-lg-5">
+        <figure class="portrait m-0">
+          <div class="frame">
+            <span class="initials" aria-hidden="true">MK</span>
+            <!-- Drop your photo in beside this file as profile.jpg.
+                 If it's missing, the gold monogram behind it shows instead. -->
+            <img src="profile.jpg" alt="Portrait of Madhusudan Kharote"
+                 onerror="this.style.display='none'">
+          </div>
+          <figcaption>
+            Taken outside Nguyen Engineering, where most of my week happens.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" id="about">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-7">
+          <h2>About me</h2>
+          <div class="prose">
+            <p>
+              I study computer science at George Mason University in Fairfax, Virginia. Before
+              Mason I earned a bachelor's degree in electronics and telecommunications, and that
+              background still shapes how I build things: measure first, assume nothing, and keep
+              the system small enough that you can reason about all of it at once.
+            </p>
+            <p>
+              Most of my time goes to three things. I teach — I'm a graduate teaching assistant
+              for ECE 334, the linear electronics lab, where I help students debug op-amp circuits
+              that look correct on paper. I write software, mostly computer vision and embedded
+              projects that run on modest hardware. And I work with GMU Dining Services on
+              inventory and shipment tracking, which turned out to be a good lesson in how much
+              of real engineering is just data nobody has organized yet.
+            </p>
+            <p>
+              Two of my papers have been published, one with Elsevier and one with Springer, both
+              on machine learning at the edge. Outside of coursework I'm usually rebuilding
+              something I already finished, because the second version is always the interesting one.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <h2>At a glance</h2>
+          <ul class="facts">
+            <li><span class="k">Program</span> <span class="v">M.S. Computer Science</span></li>
+            <li><span class="k">University</span> <span class="v">George Mason</span></li>
+            <li><span class="k">Graduating</span> <span class="v">December 2026</span></li>
+            <li><span class="k">Teaching</span> <span class="v">ECE 334 Lab</span></li>
+            <li><span class="k">Based in</span> <span class="v">Fairfax, Virginia</span></li>
+          </ul>
+          <p class="quote mt-4">
+            The colors on this page are Mason Green and Mason Gold, taken from the university's
+            official brand palette.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="work">
+    <div class="container">
+      <h2>What I've been building</h2>
+      <ul class="work">
+        <li>
+          <h3>Real-time face detection and tracking</h3>
+          <p>A YOLOv8 detector trained on WIDER FACE, paired with ByteTrack so identities hold
+             steady across frames instead of flickering between them.</p>
+        </li>
+        <li>
+          <h3>Vision-based form coach</h3>
+          <p>MediaPipe pose estimation that counts repetitions and flags bad form during a
+             workout, running live on a laptop webcam with no cloud round trip.</p>
+        </li>
+        <li>
+          <h3>A compression engine, written from scratch</h3>
+          <p>Arithmetic coding, domain-specific transforms, and Reed–Solomon error correction
+             in pure Python — slow on purpose, so every stage stays readable.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="survey">
+    <div class="container">
+      <div class="survey-band">
+        <div>
+          <h2 class="survey-title">Student survey</h2>
+          <p class="mb-0">
+            Visiting campus? Tell us what stood out — and enter the raffle for a free movie ticket
+            while you're there. It takes about two minutes.
+          </p>
+        </div>
+        <a class="btn btn-mason flex-shrink-0" href="survey.html">Take the survey</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <h2>Get in touch</h2>
+      <p class="prose">
+        The fastest way to reach me is email. I'm also happy to talk about embedded work,
+        teaching, or anything on this page.
+      </p>
+      <p><a href="mailto:mkharote@gmu.edu">mkharote@gmu.edu</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container d-flex flex-wrap justify-content-between gap-3">
+    <p class="mb-0">Madhusudan Kharote · George Mason University</p>
+    <p class="mb-0">
+      <a href="https://github.com/">GitHub</a> ·
+      <a href="https://www.linkedin.com/">LinkedIn</a> ·
+      <a href="survey.html">Survey</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

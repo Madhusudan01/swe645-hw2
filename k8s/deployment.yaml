@@ -1,0 +1,52 @@
+# Author: Madhusudan Kharote - SWE645 Homework 2
+# Purpose: Kubernetes Deployment that keeps 3 replicas of the survey site running
+# at all times; if a pod is deleted, the ReplicaSet recreates it automatically.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: survey-app
+  labels:
+    app: survey-app
+    author: madhusudan-kharote
+spec:
+  replicas: 3                      # Requirement: at least 3 pods for resiliency
+  selector:
+    matchLabels:
+      app: survey-app
+  strategy:
+    type: RollingUpdate            # Zero-downtime updates from Jenkins
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: survey-app
+    spec:
+      containers:
+        - name: survey-app
+          # Jenkins overwrites this tag with the build number on every deploy.
+          image: mkharote/swe645-survey:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "32Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10

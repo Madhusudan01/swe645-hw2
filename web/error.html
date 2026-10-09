@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+  error.html
+  Author: Madhusudan Kharote
+  Purpose: Custom error page shown when a requested page cannot be found.
+  Configured as the error document for the S3 static website and as the
+  Apache ErrorDocument 404 target on the EC2 instance.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page unavailable — Madhusudan Kharote</title>
+<meta name="description" content="This page could not be loaded.">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --mason-green:#005239;
+    --mason-gold:#FFC733;
+    --deep:#00291D;
+  }
+  html,body{height:100%}
+  body{
+    margin:0;
+    display:flex;flex-direction:column;
+    background:linear-gradient(158deg,var(--deep) 0%,var(--mason-green) 58%,#00402C 100%);
+    color:#EAF1EC;
+    font-family:"Source Serif 4",Georgia,serif;
+    font-size:1.0625rem;line-height:1.65;
+  }
+  .traces{position:fixed;inset:0;width:100%;height:100%;opacity:.18;pointer-events:none}
+  .wrap{position:relative;z-index:1;flex:1;display:flex;align-items:center}
+
+  .mark{
+    display:inline-flex;align-items:center;gap:.55rem;
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+    color:#EAF1EC;text-decoration:none;font-size:1rem;
+  }
+  .mark span{
+    display:inline-grid;place-items:center;width:34px;height:34px;border-radius:3px;
+    background:var(--mason-gold);color:var(--deep);font-weight:800;font-size:.95rem;
+  }
+
+  .code{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(4.5rem,16vw,10rem);line-height:.85;letter-spacing:-.05em;
+    color:var(--mason-gold);margin:0 0 1.25rem;
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.025em;
+    font-size:clamp(1.8rem,4vw,2.6rem);color:#fff;margin:0 0 1rem;line-height:1.05;
+  }
+  p.body{max-width:54ch;color:#D3E2D8}
+  .steps{max-width:54ch;color:#B9CFC4;padding-left:1.1rem;margin-top:1.25rem}
+  .steps li{margin-bottom:.4rem}
+
+  .btn-mason{
+    display:inline-block;background:var(--mason-gold);color:var(--deep);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+    border:none;border-radius:3px;padding:.7rem 1.4rem;text-decoration:none;margin-top:1.75rem;
+  }
+  .btn-mason:hover{background:#FFD766;color:var(--deep)}
+  :focus-visible{outline:3px solid var(--mason-gold);outline-offset:3px}
+
+  footer{
+    position:relative;z-index:1;
+    border-top:4px solid var(--mason-gold);
+    padding:1.5rem 0;font-size:.9rem;color:#CFE0D6;
+  }
+</style>
+</head>
+
+<body>
+<svg class="traces" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g fill="none" stroke="#FFC733" stroke-width="1.4">
+    <path d="M-20 90 H180 l40 40 H430 l60 -60 H760"/>
+    <path d="M-20 250 H120 l70 70 H520 l40 -40 H900 l50 50 H1220"/>
+    <path d="M1220 140 H980 l-50 -50 H700"/>
+    <path d="M-20 470 H260 l50 -50 H640 l60 60 H1220"/>
+    <path d="M840 620 V430 l-50 -50 V210"/>
+    <path d="M1090 620 V400 l-60 -60 V180"/>
+  </g>
+  <g fill="#FFC733">
+    <circle cx="430" cy="130" r="4.5"/><circle cx="900" cy="280" r="4.5"/>
+    <circle cx="700" cy="90" r="4.5"/><circle cx="640" cy="420" r="4.5"/>
+    <circle cx="790" cy="210" r="4.5"/><circle cx="120" cy="250" r="4.5"/>
+  </g>
+</svg>
+
+<div class="wrap">
+  <div class="container">
+    <a class="mark mb-5 d-inline-flex" href="index.html"><span>MK</span> Madhusudan Kharote</a>
+
+    <p class="code">404</p>
+    <h1>This page isn't here</h1>
+    <p class="body">
+      The server is running, but it couldn't find the file you asked for. The address may
+      have a typo in it, or the page may have moved since the link was made.
+    </p>
+    <ul class="steps">
+      <li>Check the spelling of the address in the bar above.</li>
+      <li>Start again from the homepage and follow the links from there.</li>
+      <li>If a link on my site sent you here, email me and I'll fix it.</li>
+    </ul>
+
+    <a class="btn-mason" href="index.html">Go to the homepage</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p class="mb-0">Madhusudan Kharote · George Mason University</p>
+  </div>
+</footer>
+
+</body>
+</html>

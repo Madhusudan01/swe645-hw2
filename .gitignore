@@ -1,0 +1,8 @@
+# Author: Madhusudan Kharote - SWE645 Homework 2
+# Purpose: Prevents secrets (AWS lab keys, .pem files) and OS clutter from being committed to GitHub.
+*.pem
+.DS_Store
+kubeconfig*
+credentials
+aws-lab-creds*
+.env

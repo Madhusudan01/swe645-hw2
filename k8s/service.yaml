@@ -1,0 +1,19 @@
+# Author: Madhusudan Kharote - SWE645 Homework 2
+# Purpose: Kubernetes Service that exposes the 3 survey pods to the internet through
+# an AWS Load Balancer, giving the public AWS URL used in the demo.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: survey-service
+  labels:
+    app: survey-app
+    author: madhusudan-kharote
+spec:
+  type: LoadBalancer               # EKS provisions an AWS ELB automatically
+  selector:
+    app: survey-app                # Routes traffic to pods from the Deployment
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

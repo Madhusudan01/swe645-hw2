@@ -1,0 +1,8 @@
+# Author: Madhusudan Kharote - SWE645 Homework 2
+# Purpose: Keeps non-website files out of the Docker build context.
+.git
+k8s
+scripts
+Jenkinsfile
+*.md
+*.zip
