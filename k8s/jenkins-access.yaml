@@ -1,0 +1,34 @@
+# Author: Madhusudan Kharote - SWE645 Homework 2
+# Purpose: Gives Jenkins its own Kubernetes identity (a ServiceAccount with a long-lived token)
+# that can deploy to the default namespace, so the pipeline never needs expiring AWS lab keys.
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-deployer
+  namespace: default
+---
+# Long-lived token for the ServiceAccount (used inside the kubeconfig uploaded to Jenkins)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins-deployer-token
+  namespace: default
+  annotations:
+    kubernetes.io/service-account.name: jenkins-deployer
+type: kubernetes.io/service-account-token
+---
+# Least privilege: "edit" rights only in the default namespace (create/update Deployments, Services, Pods)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-deployer-edit
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-deployer
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: edit
+  apiGroup: rbac.authorization.k8s.io

@@ -9,8 +9,6 @@ pipeline {
         DOCKERHUB_USER = 'mkharote'                // Docker Hub account
         IMAGE          = "${DOCKERHUB_USER}/swe645-survey"
         TAG            = "${BUILD_NUMBER}"                // unique tag per build
-        AWS_REGION     = 'us-east-1'                      // AWS Academy Learner Lab region
-        CLUSTER_NAME   = 'swe645-cluster'
     }
 
     triggers {
@@ -44,12 +42,11 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // Learner Lab keys are temporary: the whole [default] block (key, secret,
-                // session token) is stored as a Secret file and refreshed each lab session.
-                withCredentials([file(credentialsId: 'aws-lab-creds', variable: 'AWS_SHARED_CREDENTIALS_FILE')]) {
+                // Jenkins authenticates with its own Kubernetes ServiceAccount token
+                // (k8s/jenkins-access.yaml), stored in Jenkins as a Secret file credential,
+                // so the pipeline does not depend on temporary AWS Learner Lab keys.
+                withCredentials([file(credentialsId: 'eks-kubeconfig', variable: 'KUBECONFIG')]) {
                     sh '''
-                        export KUBECONFIG=$WORKSPACE/kubeconfig
-                        aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
                         # Swap the image line for this build's tag, then apply
                         sed "s|image: .*swe645-survey:.*|image: $IMAGE:$TAG|" k8s/deployment.yaml | kubectl apply -f -
                         kubectl apply -f k8s/service.yaml
@@ -67,7 +64,7 @@ pipeline {
             sh 'docker logout || true'
             sh 'docker image prune -f || true'   // keep the Jenkins disk from filling up
         }
-        success { echo "Deployed $IMAGE:$TAG to $CLUSTER_NAME" }
+        success { echo "Deployed $IMAGE:$TAG to the EKS cluster" }
         failure { echo 'Pipeline failed - check the stage logs above.' }
     }
 }
